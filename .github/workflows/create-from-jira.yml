@@ -57,7 +57,7 @@ jobs:
               return;
             }
 
-            const branchName = `${ticketKey}-${branchSlug}`;
+            const requestedBranchName = `${ticketKey}-${branchSlug}`;
             const marker = `<!-- jira-key:${ticketKey} -->`;
             const title = `[${ticketKey}] ${summary}`.slice(0, 256);
 
@@ -72,15 +72,31 @@ jobs:
               ref: `heads/${defaultBranch}`,
             });
 
-            let branchCreated = false;
-            try {
-              await github.rest.git.getRef({
+            const findBranchesForTicket = () => github.paginate(
+              github.rest.git.listMatchingRefs,
+              {
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: `heads/${branchName}`,
-              });
-            } catch (error) {
-              if (error.status !== 404) throw error;
+                ref: `heads/${ticketKey}-`,
+                per_page: 100,
+              },
+            );
+
+            let matchingRefs = await findBranchesForTicket();
+            if (matchingRefs.length > 1) {
+              core.setFailed([
+                `Multiple branches exist for ${ticketKey}:`,
+                ...matchingRefs.map((ref) => ref.ref.replace('refs/heads/', '')),
+              ].join(' '));
+              return;
+            }
+
+            let branchName = matchingRefs.length === 1
+              ? matchingRefs[0].ref.replace('refs/heads/', '')
+              : requestedBranchName;
+            let branchCreated = false;
+
+            if (matchingRefs.length === 0) {
 
               try {
                 await github.rest.git.createRef({
@@ -93,11 +109,11 @@ jobs:
               } catch (createError) {
                 if (createError.status !== 422) throw createError;
 
-                await github.rest.git.getRef({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  ref: `heads/${branchName}`,
-                });
+                matchingRefs = await findBranchesForTicket();
+                if (matchingRefs.length !== 1) {
+                  throw createError;
+                }
+                branchName = matchingRefs[0].ref.replace('refs/heads/', '');
               }
             }
 

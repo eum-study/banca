@@ -22,7 +22,7 @@
 MySQL을 실행합니다.
 
 ```shell
-docker compose up -d mysql
+docker compose up -d --wait mysql
 ```
 
 Windows에서 빌드와 테스트를 실행합니다.

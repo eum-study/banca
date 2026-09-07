@@ -3,15 +3,15 @@ CREATE TABLE products (
     product_code VARCHAR(30) NOT NULL,
     name VARCHAR(100) NOT NULL,
     sale_status VARCHAR(20) NOT NULL,
-    sale_start_at DATETIME NOT NULL,
-    sale_end_at DATETIME NOT NULL,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL,
+    sale_start_at DATETIME(6) NOT NULL,
+    sale_end_at DATETIME(6) NOT NULL,
+    created_at DATETIME(6) NOT NULL,
+    updated_at DATETIME(6) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uk_products_product_code (product_code),
     CONSTRAINT chk_products_sale_period
         CHECK (sale_start_at < sale_end_at)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE product_quotas (
     id BIGINT NOT NULL AUTO_INCREMENT,
@@ -27,4 +27,4 @@ CREATE TABLE product_quotas (
         CHECK (remaining_quantity >= 0 AND remaining_quantity <= total_quantity),
     CONSTRAINT fk_product_quotas_product
         FOREIGN KEY (product_id) REFERENCES products (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
