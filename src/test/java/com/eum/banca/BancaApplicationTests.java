@@ -1,9 +1,10 @@
 package com.eum.banca;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import com.eum.banca.support.IntegrationTest;
+
+@IntegrationTest
 class BancaApplicationTests {
 
 	@Test

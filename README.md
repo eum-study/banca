@@ -19,16 +19,22 @@
 - JDK 21
 - Docker Desktop과 Docker Compose
 
-MySQL을 실행합니다.
+단위 테스트만 실행할 때는 Docker가 필요하지 않습니다.
 
-```shell
-docker compose up -d --wait mysql
+```powershell
+.\gradlew.bat test
 ```
 
-Windows에서 빌드와 테스트를 실행합니다.
+전체 빌드는 Docker Desktop을 실행한 상태에서 수행합니다. 통합 테스트용 MySQL은 Testcontainers가 자동으로 생성하므로 Docker Compose를 먼저 실행하지 않습니다.
 
 ```powershell
 .\gradlew.bat clean build
+```
+
+애플리케이션을 로컬에서 실행할 때 사용할 MySQL을 실행합니다.
+
+```shell
+docker compose up -d --wait mysql
 ```
 
 애플리케이션을 실행합니다.
@@ -65,5 +71,7 @@ Flyway 스크립트는 `src/main/resources/db/migration`에 둡니다. 공유되
 ## 코드 구조와 협업 규칙
 
 패키지 의존 방향, 네이밍, 브랜치와 커밋 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md)를 따릅니다.
+
+테스트 종류별 책임, Testcontainers와 실행 작업은 [테스트 전략](docs/test-strategy.md)을 따릅니다.
 
 Jira 이슈가 `PLAN READY`로 전환될 때 GitHub 이슈와 브랜치를 만드는 연동 설정은 [Jira-GitHub 자동화 가이드](docs/jira-github-automation.md)를 따릅니다.
