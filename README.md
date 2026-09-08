@@ -66,4 +66,6 @@ Flyway 스크립트는 `src/main/resources/db/migration`에 둡니다. 공유되
 
 패키지 의존 방향, 네이밍, 브랜치와 커밋 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md)를 따릅니다.
 
+API 공통 응답 구조와 예외 처리 기준은 [API 응답 및 예외 처리 규약](docs/api-conventions.md)을 따릅니다.
+
 Jira 이슈가 `PLAN READY`로 전환될 때 GitHub 이슈와 브랜치를 만드는 연동 설정은 [Jira-GitHub 자동화 가이드](docs/jira-github-automation.md)를 따릅니다.
