@@ -58,13 +58,15 @@ Request body:
 {
   "event_type": "jira-plan-ready",
   "client_payload": {
-    "ticketKey": {{issue.key.asJsonString}},
-    "summary": {{issue.summary.asJsonString}},
-    "description": {{issue.description.asJsonString}},
+    "ticketKey": "{{issue.key.jsonEncode}}",
+    "summary": "{{issue.summary.jsonEncode}}",
+    "description": "{{issue.description.jsonEncode}}",
     "jiraUrl": "{{baseUrl}}/browse/{{issue.key}}"
   }
 }
 ```
+
+문자열 스마트 값은 큰따옴표 안에서 `jsonEncode`를 사용한다. Summary나 Description에 큰따옴표 또는 줄바꿈이 포함되어도 유효한 JSON으로 전송되며, Jira 편집기의 JSON 구문 검사도 통과할 수 있다.
 
 GitHub이 `204 No Content`를 반환하면 dispatch 요청이 접수된 것이다. 실제 생성 성공 여부는 GitHub Actions의 `Create GitHub work from Jira` 실행 결과에서 확인한다.
 
